@@ -1,1 +1,19 @@
-
+### 找零钱问题
+def dfs(aim,penny,start):
+    end = len(penny)-1
+    count = 0
+    if aim==0:
+        count+=1
+        return count
+    if start>end:
+        return count
+    i = 0
+    while True:
+        aim = aim-penny[start]*i
+        if aim<0:
+            break
+        count+=dfs(aim,penny,start+1)
+        aim+=penny[start]*i
+        i+=1
+    return count
+print(dfs(300,[1,5,10,50,100],0))
