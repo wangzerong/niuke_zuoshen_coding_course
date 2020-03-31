@@ -1,19 +1,44 @@
+import time
 ### 找零钱问题
 def dfs(aim,penny,start):
     end = len(penny)-1
     count = 0
-    if aim==0:
-        count+=1
-        return count
-    if start>end:
-        return count
+    if start>=end+1:
+        return 1 if aim == 0 else 0
     i = 0
     while True:
-        aim = aim-penny[start]*i
-        if aim<0:
+        t = aim - penny[start] * i
+        if t < 0:
             break
-        count+=dfs(aim,penny,start+1)
-        aim+=penny[start]*i
-        i+=1
+        count += dfs(t, penny, start + 1)
+        i += 1
     return count
-print(dfs(300,[1,5,10,50,100],0))
+
+def dfs_memory(aim,penny,start,m):
+    end = len(penny) - 1
+    count = 0
+    if start >= end + 1:
+        return 1 if aim==0 else 0
+    if m[start][aim]!=0:
+        return 0 if m[start][aim]==-1 else m[start][aim]
+    i = 0
+    while True:
+        t = aim - penny[start] * i
+        if t < 0:
+            break
+        if m[start+1][t]!=0:
+            if m[start+1][t]==-1:
+                count+=0
+            else:
+                count+=m[start+1][t]
+        else:
+            count += dfs_memory(t, penny, start + 1,m)
+        i += 1
+    m[start][aim]=-1 if count==0 else count
+    return count
+aim = 100
+penny = [1,2,5]
+m = [[]]*(len(penny)+1)
+for i in range(len(penny)+1):
+    m[i]=[0]*(aim+1)
+print(dfs_memory(aim,penny,0,m))
