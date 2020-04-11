@@ -58,3 +58,23 @@ for i in range(len(penny)+1):
     m[i]=[0]*(aim+1)
 print(dfs_memory(aim,penny,0,m))
 print(find_penny(aim,penny))
+
+res = float("inf")
+m = [[1,3,5,9],[8,1,3,4],[5,0,6,1],[8,8,4,0]]
+visit = [[]]*len(m)
+for i in range(len(visit)):
+    visit[i] = [0]*len(m[0])
+path = []
+def find_path(nums,rows,cols,row,col,path,visit,s):
+    global  res
+    if row>=0 and row<=rows and col>=0 and col<=cols and visit[row][col]!=1:
+        visit[row][col] = 1
+        s = s+nums[row][col]
+        path.append(nums[row][col])
+        if row == rows and col == cols:
+            res = min(res,sum(path))
+            print(path,res)
+        find_path(nums,rows,cols,row,col+1,path,visit,s)
+        find_path(nums, rows, cols, row+1, col,path,visit,s)
+        path.pop()
+        visit[row][col] = 0
